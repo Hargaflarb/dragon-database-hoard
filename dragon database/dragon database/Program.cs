@@ -10,6 +10,7 @@ namespace dragon_database
     {
         static void Main(string[] args)
         {
+            //REMEMBER TO ACTIVATE DATABASE BEFORE RUNNING PROGRAM!!!
             Console.WriteLine("Hello World");
             Console.ReadLine();
         }
