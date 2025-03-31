@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace dragon_database
 {
@@ -17,21 +18,22 @@ namespace dragon_database
 
     public enum Table
     {
-        Players = 1,
-        Hoards = 2,
-        Treasures = 3,
-        Kingdoms = 4,
-        Debts = 5,
-        KingdomRelations = 6,
+        Players = 0,
+        Hoards = 1,
+        Treasures = 2,
+        Kingdoms = 3,
+        Debts = 4,
+        KingdomRelations = 5,
     }
 
     public static class ConsoleManager
     {
         private static SqlConnection connection;
         private static Table selectedTable = Table.Players;
+        private static readonly TableFormat[] Formats = new TableFormat[] { new PlayerFormat(), new HoardFormat(), new TreasureFormat(), new KingdomsFormat(), new DebtFormat(), new KingdomRelationsFormat() };
         private static ConsoleState selectedState = ConsoleState.TableSelection;
         private static int selectedRow = 0;
-        private static int rowMax = 1;
+        private static int rowMax = 0;
 
         public static SqlConnection Connection { private get => connection; set => connection = value; }
         public static Table SelectedTable
@@ -39,7 +41,7 @@ namespace dragon_database
             get => selectedTable;
             set
             {
-                if (value > selectedTable & (int)selectedTable < 6)
+                if (value > selectedTable & selectedTable < Table.KingdomRelations)
                 {
                     selectedTable++;
                 }
@@ -49,9 +51,9 @@ namespace dragon_database
                 }
             }
         }
-        public static ConsoleState SelectedState 
+        public static ConsoleState SelectedState
         {
-            get => selectedState; 
+            get => selectedState;
             set
             {
                 if (value > selectedState & (int)selectedState < 3)
@@ -62,9 +64,9 @@ namespace dragon_database
                 {
                     selectedState--;
                 }
-            } 
+            }
         }
-        public static int SelectedRow 
+        public static int SelectedRow
         {
             get => selectedRow;
             set
@@ -78,8 +80,9 @@ namespace dragon_database
 
 
 
-        public static void TakeInput(ConsoleKey key)
+        public static void TakeInput(ConsoleKey key, out bool exit)
         {
+            exit = false;
             switch (key)
             {
                 case ConsoleKey.UpArrow:
@@ -121,7 +124,8 @@ namespace dragon_database
                     break;
 
                 case ConsoleKey.Escape:
-                    break;
+                    exit = true;
+                    return;
 
                 default:
                     break;
@@ -133,16 +137,38 @@ namespace dragon_database
         public static void UpdateScreen()
         {
             Console.Clear();
-            Console.WriteLine($"State: {SelectedState}\nTabel: {selectedTable}\nRow: {SelectedRow}\n");
+            Console.WriteLine($"State: {SelectedState}\nTabel: {selectedTable}\nRow: {SelectedRow}\n\n");
 
-            List<string> rows = Display();
-            foreach (string row in rows)
+            List<string> rows = Formats[(int)SelectedTable].Select(Connection);
+            rows.Add("Insert Row...");
+            for (int i = 0; i < rows.Count | i <= (int)Table.KingdomRelations; i++)
             {
-                Console.WriteLine(row);
+                string tableString = i <= (int)Table.KingdomRelations ? ((Table)i).ToString() : "";
+                string rowString = i < rows.Count ? rows[i] : "";
+
+                WriteWithColor(selectedState == ConsoleState.TableSelection & selectedTable == (Table)i, tableString);
+                Console.CursorLeft = 20;
+                WriteWithColor(selectedState == ConsoleState.RowSelection & selectedRow == i, rowString);
+
+
+                Console.WriteLine();
             }
-            Console.WriteLine("Insert Row...");
             rowMax = rows.Count;
         }
+
+        private static void WriteWithColor(bool condition, string text)
+        {
+            if (condition)
+            {
+                Console.BackgroundColor = ConsoleColor.White;
+            }
+            Console.Write(text);
+            Console.ResetColor();
+        }
+
+
+
+
 
         public static void AddAccount(string name, string password)
         {
@@ -163,21 +189,6 @@ namespace dragon_database
 
         }
 
-        public static List<string> Display()
-        {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", Connection); //{SelectedTable.ToString()}
-            SqlDataReader reader = readCommand.ExecuteReader();
-
-            List<string> rows = new List<string>();
-
-            while (reader.Read())
-            {
-                rows.Add($"{reader.GetInt32(0)}, {reader.GetString(1)}, {reader.GetString(2)}, {reader.GetInt32(3)}");
-            }
-
-            reader.Close();
-            return rows;
-        }
 
 
     }
