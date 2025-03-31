@@ -10,9 +10,9 @@ namespace dragon_database
 {
     public class Program
     {
-        static string EchoConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=CSTestThing;Trusted_Connection=True;TrustServerCertificate=True";
-        static string EmmaConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=CSTestThing;Trusted_Connection=True;TrustServerCertificate=True";
-        static string MaltheconnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=CSTestThing;Trusted_Connection=True;TrustServerCertificate=True";
+        static string EchoConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
+        static string EmmaConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
+        static string MaltheconnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
         static SqlConnection connection;
 
         static void Main(string[] args)
@@ -38,11 +38,17 @@ namespace dragon_database
                     Environment.Exit(0);
                     break;
             }
-
+            ConsoleManager.Connection = connection;
             connection.Open();
+
             try
             {
-                
+                ConsoleManager.UpdateScreen();
+                for (int i = 0; i < 10; i++)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    ConsoleManager.TakeInput(key.Key);
+                }
             }
             catch (Exception e)
             {
@@ -56,51 +62,5 @@ namespace dragon_database
             }
         }
 
-        public static void AddAccount(string name, string password)
-        {
-            string writeQuery = $"INSERT INTO Accounts (Name, Password) VALUES ('{name}','{password}')";
-            SqlCommand insertCommand = new SqlCommand(writeQuery, connection);
-
-            int rowsAffected = insertCommand.ExecuteNonQuery();
-            Console.WriteLine($"{rowsAffected} accounts successfully added");
-        }
-
-        public static void DeleteAccount(int ID)
-        {
-            string deleteQuery = $"DELETE FROM Accounts WHERE (Account_ID = '{ID}')";
-            SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
-
-            int rowsAffected = deleteCommand.ExecuteNonQuery();
-            Console.WriteLine($"{rowsAffected} accounts successfully deleted");
-
-        }
-
-        public static void DisplayAccounts()
-        {
-
-            SqlCommand readCommand = new SqlCommand("SELECT * FROM Accounts", connection);
-            SqlDataReader reader = readCommand.ExecuteReader();
-
-
-            while (reader.Read())
-            {
-                Console.WriteLine($"{reader.GetInt32(0)}, {reader.GetString(1)}, {reader.GetString(2)}");
-            }
-
-
-            reader.Close();
-        }
-        
-
-        public string InsertStatmentFor(string tableName)
-        {
-            switch (tableName)
-            {
-                case "Player":
-                    return "Player (Username, Password, Hunger) VALUE ('', '', '0')";
-                default:
-                    return "hi";
-            }
-        }
     }
 }
