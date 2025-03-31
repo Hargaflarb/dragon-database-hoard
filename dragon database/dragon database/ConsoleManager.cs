@@ -35,7 +35,7 @@ namespace dragon_database
         private static int selectedRow = 0;
         private static int rowMax = 0;
 
-        public static SqlConnection Connection { private get => connection; set => connection = value; }
+        public static SqlConnection Connection { get => connection; set => connection = value; }
         public static Table SelectedTable
         {
             get => selectedTable;
@@ -45,7 +45,7 @@ namespace dragon_database
                 {
                     selectedTable++;
                 }
-                else if (value < selectedTable & (int)selectedTable > 1)
+                else if (value < selectedTable & selectedTable > Table.Players)
                 {
                     selectedTable--;
                 }
@@ -113,6 +113,15 @@ namespace dragon_database
                     break;
 
                 case ConsoleKey.Enter:
+                    if (selectedState == ConsoleState.RowSelection & selectedRow == rowMax - 1)
+                    {
+                        (int parameters, string format) format = Formats[(int)SelectedTable].InsertFormat;
+                        Console.CursorLeft = 40;
+                        Console.Write($"{format.format}\n");
+                        Console.CursorLeft = 40;
+                        
+                        Formats[(int)SelectedTable].Insert(Console.ReadLine());
+                    }
                     SelectedState++;
                     break;
 
@@ -139,7 +148,7 @@ namespace dragon_database
             Console.Clear();
             Console.WriteLine($"State: {SelectedState}\nTabel: {selectedTable}\nRow: {SelectedRow}\n\n");
 
-            List<string> rows = Formats[(int)SelectedTable].Select(Connection);
+            List<string> rows = Formats[(int)SelectedTable].Select();
             rows.Add("Insert Row...");
             for (int i = 0; i < rows.Count | i <= (int)Table.KingdomRelations; i++)
             {

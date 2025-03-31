@@ -39,10 +39,10 @@ namespace dragon_database
                     break;
             }
             ConsoleManager.Connection = connection;
+            connection.Open();
 
             try
             {
-                connection.Open();
                 ConsoleManager.UpdateScreen();
                 for (int i = 0; i < 10; i++)
                 {
