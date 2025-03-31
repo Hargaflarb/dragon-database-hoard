@@ -11,7 +11,7 @@ namespace dragon_database
     public class Program
     {
         static string EchoConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
-        static string EmmaConnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
+        static string EmmaConnectionString = "server= PC_FOR_CAKES\\SQLEXPRESS;Database=Dragon_Hoghnard;Trusted_Connection=True;TrustServerCertificate=True";
         static string MaltheconnectionString = "Server=LAPTOP-MALTHE\\SQLEXPRESS;Database=Dragon_Hoard;Trusted_Connection=True;TrustServerCertificate=True";
         static SqlConnection connection;
 
