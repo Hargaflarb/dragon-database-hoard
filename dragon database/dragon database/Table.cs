@@ -12,8 +12,7 @@ namespace dragon_database
     {
         protected static SqlConnection connection;
         public abstract (int parameters, string format) InsertFormat { get; }
-        //public abstract string UpdateFormat { get; }
-
+        public abstract string UpdateFormat { get; }
 
         public void ExecuteQuery(string query)
         {
@@ -29,7 +28,7 @@ namespace dragon_database
 
         public abstract void Insert(string args);
 
-        public abstract void Update(string args);
+        public abstract void Update(string args, string mathArgs);
 
         public abstract void Delete(string args);
 
@@ -39,7 +38,8 @@ namespace dragon_database
     public class PlayerFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Name', 'Password', 'Hunger'"); }
-        //public override string UpadteFormat { get => "name => idk"; }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Username, LoginPassword, Hunger"); }
 
         public override List<string> Select()
         {
@@ -77,9 +77,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE Players SET {mathArgs} WHERE {args}";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
@@ -91,6 +92,8 @@ namespace dragon_database
     public class HoardFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'MoneyAmount'"); }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, LastPayment"); }
 
         public override List<string> Select()
         {
@@ -131,9 +134,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE Hoards SET ({mathArgs}) WHERE ({args})";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
@@ -145,6 +149,9 @@ namespace dragon_database
     public class TreasureFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Rarity', 'TreasureName'"); }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Rarity, TreasureName"); }
+
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Treasures", ConsoleManager.Connection);
@@ -184,9 +191,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE Treasures SET ({mathArgs}) WHERE ({args})";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
@@ -198,6 +206,8 @@ namespace dragon_database
     public class KingdomsFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Approval', 'Fear', 'Economy', 'KingdomName'"); }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Approval, Fear, Economy, KingdomName"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
@@ -237,9 +247,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE Kingdoms SET ({mathArgs}) WHERE ({args})";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
@@ -251,6 +262,8 @@ namespace dragon_database
     public class DebtFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Amount', 'ForKingdom', 'PlayerId', 'LastPayment'"); }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, PlayerId, LastPayment"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
@@ -289,9 +302,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE Debts SET ({mathArgs}) WHERE ({args})";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
@@ -303,6 +317,8 @@ namespace dragon_database
     public class KingdomRelationsFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Kingdom1Name', 'Kingdom2Name', 'PlayerId', 'Relation'"); }
+
+        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Kingdom1Name, Kingdom2Name, Relation"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);
@@ -342,9 +358,10 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args)
+        public override void Update(string args, string mathArgs)
         {
-
+            string updateQuery = $"UPDATE KingdomRelations SET ({mathArgs}) WHERE ({args})";
+            ExecuteQuery(updateQuery);
         }
 
         public override void Delete(string conditions)
