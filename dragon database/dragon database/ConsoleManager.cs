@@ -150,9 +150,12 @@ namespace dragon_database
                         if (selectedManipulation == 0)
                         {
                             string condition = Formats[(int)SelectedTable].GetItemCondition(SelectedRow);
-                            string arg1 = Console.ReadLine();
+                            Console.CursorLeft = 80;
+                            Console.WriteLine($"{Formats[(int)SelectedTable].UpdateFormat}\n");
+                            Console.CursorLeft = 80;
+                            string query = Console.ReadLine();
 
-                            //Formats[(int)SelectedTable].Update(arg1, condition);
+                            Formats[(int)SelectedTable].Update(query, condition);
                         }
                         else
                         {
