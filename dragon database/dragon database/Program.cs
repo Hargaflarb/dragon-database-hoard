@@ -47,7 +47,11 @@ namespace dragon_database
                 for (int i = 0; i < 10; i++)
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
-                    ConsoleManager.TakeInput(key.Key);
+                    ConsoleManager.TakeInput(key.Key, out bool exit);
+                    if (exit)
+                    {
+                        break;
+                    }
                 }
             }
             catch (Exception e)
