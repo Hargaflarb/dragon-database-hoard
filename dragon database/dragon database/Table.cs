@@ -62,7 +62,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i != index; i++)
             {
                 reader.Read();
             }
