@@ -34,6 +34,7 @@ namespace dragon_database
         private static ConsoleState selectedState = ConsoleState.TableSelection;
         private static int selectedRow = 0;
         private static int rowMax = 0;
+        private static int selectedManipulation = 0;
 
         public static SqlConnection Connection { get => connection; set => connection = value; }
         public static Table SelectedTable
@@ -56,7 +57,7 @@ namespace dragon_database
             get => selectedState;
             set
             {
-                if (value > selectedState & (int)selectedState < 3)
+                if (value > selectedState & (int)selectedState < 3 & selectedRow != rowMax - 1)
                 {
                     selectedState++;
                 }
@@ -77,8 +78,18 @@ namespace dragon_database
                 }
             }
         }
+        public static int SelectedManipulation
+        {
+            get => selectedManipulation;
+            set
+            {
+                if (value >= 0 & value <= 1)
+                {
+                    selectedManipulation = value;
+                }
+            }
 
-
+        }
 
         public static void TakeInput(ConsoleKey key, out bool exit)
         {
@@ -94,6 +105,10 @@ namespace dragon_database
                     {
                         SelectedRow--;
                     }
+                    else if (selectedState == ConsoleState.RowManipulation)
+                    {
+                        SelectedManipulation--;
+                    }
                     break;
                 case ConsoleKey.DownArrow:
                     if (selectedState == ConsoleState.TableSelection)
@@ -103,6 +118,10 @@ namespace dragon_database
                     else if (selectedState == ConsoleState.RowSelection)
                     {
                         SelectedRow++;
+                    }
+                    else if (selectedState == ConsoleState.RowManipulation)
+                    {
+                        SelectedManipulation++;
                     }
                     break;
                 case ConsoleKey.RightArrow:
@@ -119,10 +138,31 @@ namespace dragon_database
                         Console.CursorLeft = 40;
                         Console.Write($"{format.format}\n");
                         Console.CursorLeft = 40;
-                        
+
                         Formats[(int)SelectedTable].Insert(Console.ReadLine());
                     }
-                    SelectedState++;
+                    else if (selectedState == ConsoleState.RowSelection)
+                    {
+                        SelectedState++;
+                    }
+                    else if (selectedState == ConsoleState.RowManipulation)
+                    {
+                        if (selectedManipulation == 0)
+                        {
+                            string condition = Formats[(int)SelectedTable].GetItemCondition(SelectedRow);
+                            Console.CursorLeft = 80;
+                            Console.WriteLine($"{Formats[(int)SelectedTable].UpdateFormat}\n");
+                            Console.CursorLeft = 80;
+                            string query = Console.ReadLine();
+
+                            Formats[(int)SelectedTable].Update(query, condition);
+                        }
+                        else
+                        {
+                            string condition = Formats[(int)SelectedTable].GetItemCondition(SelectedRow);
+                            Formats[(int)SelectedTable].Delete(condition);
+                        }
+                    }
                     break;
 
                 case ConsoleKey.Select:
@@ -154,11 +194,16 @@ namespace dragon_database
             {
                 string tableString = i <= (int)Table.KingdomRelations ? ((Table)i).ToString() : "";
                 string rowString = i < rows.Count ? rows[i] : "";
+                string manipulationString = i == selectedRow ? "Update" : i == selectedRow + 1 ? "Delete" : "";
 
                 WriteWithColor(selectedState == ConsoleState.TableSelection & selectedTable == (Table)i, tableString);
                 Console.CursorLeft = 20;
                 WriteWithColor(selectedState == ConsoleState.RowSelection & selectedRow == i, rowString);
-
+                if (selectedState == ConsoleState.RowManipulation)
+                {
+                    Console.CursorLeft = 80;
+                    WriteWithColor(selectedState == ConsoleState.RowManipulation & SelectedManipulation + SelectedRow == i, manipulationString);
+                }
 
                 Console.WriteLine();
             }
