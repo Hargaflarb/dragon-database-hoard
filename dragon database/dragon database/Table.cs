@@ -68,7 +68,7 @@ namespace dragon_database
 
         public override void Delete(string args)
         {
-            string deleteQuery = $"DELETE FROM Player WHERE (PlayerId = '{ID}')";
+            string deleteQuery = $"DELETE FROM Player WHERE (PlayerId = '{args}')";
             ExecuteQuery(deleteQuery);
         }
     }
