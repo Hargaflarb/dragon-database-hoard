@@ -14,14 +14,10 @@ namespace dragon_database
         public abstract (int parameters, string format) InsertFormat { get; }
 
 
-        public TableFormat()
-        {
-            connection = ConsoleManager.Connection;
-        }
 
         public void ExecuteQuery(string query)
         {
-            SqlCommand insertCommand = new SqlCommand(query, connection);
+            SqlCommand insertCommand = new SqlCommand(query, ConsoleManager.Connection);
 
             int rowsAffected = insertCommand.ExecuteNonQuery();
             Console.WriteLine($"{rowsAffected} rows successfully affected.");
@@ -44,7 +40,7 @@ namespace dragon_database
 
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -72,16 +68,17 @@ namespace dragon_database
 
         public override void Delete(string args)
         {
-
+            string deleteQuery = $"DELETE FROM Player WHERE (PlayerId = '{ID}')";
+            ExecuteQuery(deleteQuery);
         }
     }
     public class HoardFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(Name, Password, fuckyou)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "(PlayerId, MoneyAmount)"); }
 
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Hoards", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Hoards", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -97,7 +94,8 @@ namespace dragon_database
 
         public override void Insert(string args)
         {
-
+            string insertQuery = $"INSERT INTO Players (PlayerId, MoneyAmount) VALUES ({args})";
+            ExecuteQuery(insertQuery);
         }
 
         public override void Update(string args)
@@ -112,10 +110,10 @@ namespace dragon_database
     }
     public class TreasureFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(Name, Password, fuckyou)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Rarity', 'TreasureName'"); }
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Treasures", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Treasures", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -131,7 +129,8 @@ namespace dragon_database
 
         public override void Insert(string args)
         {
-
+            string insertQuery = $"INSERT INTO Players (PlayerId, Rarity, TreasureName) VALUES ({args})";
+            ExecuteQuery(insertQuery);
         }
 
         public override void Update(string args)
@@ -146,10 +145,10 @@ namespace dragon_database
     }
     public class KingdomsFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(Name, Password, fuckyou)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Approval', 'Fear', 'Economy', 'KingdomName'"); }
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -165,7 +164,8 @@ namespace dragon_database
 
         public override void Insert(string args)
         {
-
+            string insertQuery = $"INSERT INTO Players (PlayerId, Approval, Fear, Economy, KingdomName) VALUES ({args})";
+            ExecuteQuery(insertQuery);
         }
 
         public override void Update(string args)
@@ -180,10 +180,10 @@ namespace dragon_database
     }
     public class DebtFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(Name, Password, fuckyou)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "'Amount', 'ForKingdom', 'PlayerId', 'LastPayment'"); }
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -199,7 +199,8 @@ namespace dragon_database
 
         public override void Insert(string args)
         {
-
+            string insertQuery = $"INSERT INTO KingdomRelations (Amount, ForKingdom, PlayerId, LastPayment) VALUES ({args})";
+            ExecuteQuery(insertQuery);
         }
 
         public override void Update(string args)
@@ -214,10 +215,10 @@ namespace dragon_database
     }
     public class KingdomRelationsFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(Name, Password, fuckyou)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "'Kingdom1Name', 'Kingdom2Name', 'PlayerId', 'Relation'"); }
         public override List<string> Select()
         {
-            SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", connection);
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
             List<string> rows = new List<string>();
@@ -233,7 +234,8 @@ namespace dragon_database
 
         public override void Insert(string args)
         {
-
+            string insertQuery = $"INSERT INTO KingdomRelations (Kingdom1Name, Kingdom2Name, PlayerId, Relation) VALUES ({args})";
+            ExecuteQuery(insertQuery);
         }
 
         public override void Update(string args)
