@@ -12,7 +12,7 @@ namespace dragon_database
     {
         protected static SqlConnection connection;
         public abstract (int parameters, string format) InsertFormat { get; }
-
+        //public abstract string UpdateFormat { get; }
 
 
         public void ExecuteQuery(string query)
@@ -23,6 +23,8 @@ namespace dragon_database
             Console.WriteLine($"{rowsAffected} rows successfully affected.");
         }
 
+        public abstract string GetItemCondition(int index);
+
         public abstract List<string> Select();
 
         public abstract void Insert(string args);
@@ -31,12 +33,13 @@ namespace dragon_database
 
         public abstract void Delete(string args);
 
+
     }
 
     public class PlayerFormat : TableFormat
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Name', 'Password', 'Hunger'"); }
-
+        //public override string UpadteFormat { get => "name => idk"; }
 
         public override List<string> Select()
         {
@@ -54,6 +57,19 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"Id = '{reader.GetInt32(0)}'";
+            reader.Close();
+            return outCondition;
+        }
 
         public override void Insert(string args)
         {
@@ -66,15 +82,15 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-            string deleteQuery = $"DELETE FROM Player WHERE (PlayerId = '{args}')";
+            string deleteQuery = $"DELETE FROM Players WHERE ({conditions})";
             ExecuteQuery(deleteQuery);
         }
     }
     public class HoardFormat : TableFormat
     {
-        public override (int parameters, string format) InsertFormat { get => (3, "(PlayerId, MoneyAmount)"); }
+        public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'MoneyAmount'"); }
 
         public override List<string> Select()
         {
@@ -92,9 +108,26 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Hoards", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            List<string> rows = new List<string>();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"PlayerId = '{reader.GetInt32(0)}'";
+            reader.Close();
+            return outCondition;
+        }
+
+
         public override void Insert(string args)
         {
-            string insertQuery = $"INSERT INTO Players (PlayerId, MoneyAmount) VALUES ({args})";
+            string insertQuery = $"INSERT INTO Hoards (PlayerId, MoneyAmount) VALUES ({args})";
             ExecuteQuery(insertQuery);
         }
 
@@ -103,9 +136,10 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-
+            string deleteQuery = $"DELETE FROM Hoards WHERE ({conditions})";
+            ExecuteQuery(deleteQuery);
         }
     }
     public class TreasureFormat : TableFormat
@@ -127,9 +161,26 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Treasures", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            List<string> rows = new List<string>();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"PlayerId = '{reader.GetInt32(0)}' AND Id = '{reader.GetInt32(4)}'";
+            reader.Close();
+            return outCondition;
+        }
+
+
         public override void Insert(string args)
         {
-            string insertQuery = $"INSERT INTO Players (PlayerId, Rarity, TreasureName) VALUES ({args})";
+            string insertQuery = $"INSERT INTO Treasures (PlayerId, Rarity, TreasureName) VALUES ({args})";
             ExecuteQuery(insertQuery);
         }
 
@@ -138,9 +189,10 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-
+            string deleteQuery = $"DELETE FROM Treasures WHERE ({conditions})";
+            ExecuteQuery(deleteQuery);
         }
     }
     public class KingdomsFormat : TableFormat
@@ -162,9 +214,26 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            List<string> rows = new List<string>();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"PlayerId = '{reader.GetInt32(0)}' & KingdomName = '{reader.GetInt32(4)}'";
+            reader.Close();
+            return outCondition;
+        }
+
+
         public override void Insert(string args)
         {
-            string insertQuery = $"INSERT INTO Players (PlayerId, Approval, Fear, Economy, KingdomName) VALUES ({args})";
+            string insertQuery = $"INSERT INTO Kingdoms (PlayerId, Approval, Fear, Economy, KingdomName) VALUES ({args})";
             ExecuteQuery(insertQuery);
         }
 
@@ -173,9 +242,10 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-
+            string deleteQuery = $"DELETE FROM Kingdoms WHERE ({conditions})";
+            ExecuteQuery(deleteQuery);
         }
     }
     public class DebtFormat : TableFormat
@@ -197,9 +267,25 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            List<string> rows = new List<string>();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"ForKingdom = '{reader.GetInt32(1)}' AND PlayerId = '{reader.GetInt32(2)}'";
+            reader.Close();
+            return outCondition;
+        }
+
         public override void Insert(string args)
         {
-            string insertQuery = $"INSERT INTO KingdomRelations (Amount, ForKingdom, PlayerId, LastPayment) VALUES ({args})";
+            string insertQuery = $"INSERT INTO Debts (Amount, ForKingdom, PlayerId, LastPayment) VALUES ({args})";
             ExecuteQuery(insertQuery);
         }
 
@@ -208,9 +294,10 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-
+            string deleteQuery = $"DELETE FROM Debts WHERE ({conditions})";
+            ExecuteQuery(deleteQuery);
         }
     }
     public class KingdomRelationsFormat : TableFormat
@@ -232,6 +319,23 @@ namespace dragon_database
             return rows;
         }
 
+        public override string GetItemCondition(int index)
+        {
+            SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);
+            SqlDataReader reader = readCommand.ExecuteReader();
+
+            List<string> rows = new List<string>();
+
+            for (int i = 0; i != index; i++)
+            {
+                reader.Read();
+            }
+            string outCondition = $"Kingdom1Name = '{reader.GetInt32(0)}' AND Kingdom2Name = '{reader.GetInt32(1)}' AND PlayerId = '{reader.GetInt32(2)}'";
+            reader.Close();
+            return outCondition;
+        }
+
+
         public override void Insert(string args)
         {
             string insertQuery = $"INSERT INTO KingdomRelations (Kingdom1Name, Kingdom2Name, PlayerId, Relation) VALUES ({args})";
@@ -243,9 +347,10 @@ namespace dragon_database
 
         }
 
-        public override void Delete(string args)
+        public override void Delete(string conditions)
         {
-
+            string deleteQuery = $"DELETE FROM KingdomRelations WHERE ({conditions})";
+            ExecuteQuery(deleteQuery);
         }
     }
 
