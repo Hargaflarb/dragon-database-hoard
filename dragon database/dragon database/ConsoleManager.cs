@@ -202,7 +202,7 @@ namespace dragon_database
                 WriteWithColor(selectedState == ConsoleState.RowSelection & selectedRow == i, rowString);
                 if (selectedState == ConsoleState.RowManipulation)
                 {
-                    Console.CursorLeft = 80;
+                    Console.CursorLeft = 60;
                     WriteWithColor(selectedState == ConsoleState.RowManipulation & SelectedManipulation + SelectedRow == i, manipulationString);
                 }
 
