@@ -39,7 +39,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Name', 'Password', 'Hunger'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Username, LoginPassword, Hunger"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Username, LoginPassword, Hunger"); }
 
         public override List<string> Select()
         {
@@ -63,7 +63,7 @@ namespace dragon_database
             SqlDataReader reader = readCommand.ExecuteReader();
 
             reader.Read();
-            for (int i = 1; i != index; i++)
+            for (int i = 1; i <= index; i++)
             {
                 reader.Read();
             }
@@ -78,9 +78,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Players SET {mathArgs} WHERE {args}";
+            string updateQuery = $"UPDATE Players SET {args} WHERE {condition}";
             ExecuteQuery(updateQuery);
         }
 
