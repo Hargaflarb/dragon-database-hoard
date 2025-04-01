@@ -39,7 +39,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Name', 'Password', 'Hunger'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Username, LoginPassword, Hunger"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Username, LoginPassword, Hunger"); }
 
         public override List<string> Select()
         {
@@ -62,7 +62,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Players", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i <= index; i++)
             {
                 reader.Read();
             }
@@ -77,9 +78,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Players SET {mathArgs} WHERE {args}";
+            string updateQuery = $"UPDATE Players SET {args} WHERE {condition}";
             ExecuteQuery(updateQuery);
         }
 
@@ -93,7 +94,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'MoneyAmount'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, LastPayment"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Amount, ForKingdom, LastPayment"); }
 
         public override List<string> Select()
         {
@@ -151,7 +152,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Rarity', 'TreasureName'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Rarity, TreasureName"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Rarity, TreasureName"); }
 
         public override List<string> Select()
         {
@@ -208,7 +209,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Approval', 'Fear', 'Economy', 'KingdomName'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Approval, Fear, Economy, KingdomName"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Approval, Fear, Economy, KingdomName"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
@@ -264,7 +265,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Amount', 'ForKingdom', 'PlayerId', 'LastPayment'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, PlayerId, LastPayment"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Amount, ForKingdom, PlayerId, LastPayment"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
@@ -319,7 +320,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Kingdom1Name', 'Kingdom2Name', 'PlayerId', 'Relation'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Kingdom1Name, Kingdom2Name, Relation"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Kingdom1Name, Kingdom2Name, Relation"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);

@@ -151,9 +151,9 @@ namespace dragon_database
                         if (selectedManipulation == 0)
                         {
                             string condition = Formats[(int)SelectedTable].GetItemCondition(SelectedRow);
-                            Console.CursorLeft = 80;
+                            Console.CursorLeft = 60;
                             Console.WriteLine($"{Formats[(int)SelectedTable].UpdateFormat}\n");
-                            Console.CursorLeft = 80;
+                            Console.CursorLeft = 60;
                             string query = Console.ReadLine();
 
                             Formats[(int)SelectedTable].Update(query, condition);
@@ -202,7 +202,7 @@ namespace dragon_database
                 WriteWithColor(selectedState == ConsoleState.RowSelection & selectedRow == i, rowString);
                 if (selectedState == ConsoleState.RowManipulation)
                 {
-                    Console.CursorLeft = 80;
+                    Console.CursorLeft = 60;
                     WriteWithColor(selectedState == ConsoleState.RowManipulation & SelectedManipulation + SelectedRow == i, manipulationString);
                 }
 
