@@ -44,7 +44,7 @@ namespace dragon_database
             try
             {
                 ConsoleManager.UpdateScreen();
-                for (int i = 0; i < 10; i++)
+                while (true)
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     ConsoleManager.TakeInput(key.Key, out bool exit);

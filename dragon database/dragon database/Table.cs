@@ -118,7 +118,8 @@ namespace dragon_database
 
             List<string> rows = new List<string>();
 
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }

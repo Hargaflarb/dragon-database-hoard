@@ -64,6 +64,7 @@ namespace dragon_database
                 else if (value < selectedState & (int)selectedState > 1)
                 {
                     selectedState--;
+                    selectedRow = 0;
                 }
             }
         }
