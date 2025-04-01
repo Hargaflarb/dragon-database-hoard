@@ -94,7 +94,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'MoneyAmount'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, LastPayment"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Amount, ForKingdom, LastPayment"); }
 
         public override List<string> Select()
         {
@@ -152,7 +152,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Rarity', 'TreasureName'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Rarity, TreasureName"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Rarity, TreasureName"); }
 
         public override List<string> Select()
         {
@@ -209,7 +209,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'PlayerId', 'Approval', 'Fear', 'Economy', 'KingdomName'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Approval, Fear, Economy, KingdomName"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Approval, Fear, Economy, KingdomName"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
@@ -265,7 +265,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Amount', 'ForKingdom', 'PlayerId', 'LastPayment'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Amount, ForKingdom, PlayerId, LastPayment"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Amount, ForKingdom, PlayerId, LastPayment"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
@@ -320,7 +320,7 @@ namespace dragon_database
     {
         public override (int parameters, string format) InsertFormat { get => (3, "'Kingdom1Name', 'Kingdom2Name', 'PlayerId', 'Relation'"); }
 
-        public override string UpdateFormat { get => ("VALUE = NEWVALUE       | Kingdom1Name, Kingdom2Name, Relation"); }
+        public override string UpdateFormat { get => ("VALUE = 'NEWVALUE'       | Kingdom1Name, Kingdom2Name, Relation"); }
         public override List<string> Select()
         {
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);
