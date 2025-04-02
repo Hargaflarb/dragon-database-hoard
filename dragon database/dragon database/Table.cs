@@ -28,7 +28,7 @@ namespace dragon_database
 
         public abstract void Insert(string args);
 
-        public abstract void Update(string args, string mathArgs);
+        public abstract void Update(string args, string condition);
 
         public abstract void Delete(string args);
 
@@ -63,7 +63,7 @@ namespace dragon_database
             SqlDataReader reader = readCommand.ExecuteReader();
 
             reader.Read();
-            for (int i = 1; i <= index; i++)
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }
@@ -136,9 +136,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Hoards SET ({mathArgs}) WHERE ({args})";
+            string updateQuery = $"UPDATE Hoards SET {args} WHERE ({condition})";
             ExecuteQuery(updateQuery);
         }
 
@@ -175,9 +175,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Treasures", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            List<string> rows = new List<string>();
-
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }
@@ -186,16 +185,15 @@ namespace dragon_database
             return outCondition;
         }
 
-
         public override void Insert(string args)
         {
             string insertQuery = $"INSERT INTO Treasures (PlayerId, Rarity, TreasureName) VALUES ({args})";
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Treasures SET ({mathArgs}) WHERE ({args})";
+            string updateQuery = $"UPDATE Treasures SET {args} WHERE ({condition})";
             ExecuteQuery(updateQuery);
         }
 
@@ -231,9 +229,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Kingdoms", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            List<string> rows = new List<string>();
-
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }
@@ -249,9 +246,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Kingdoms SET ({mathArgs}) WHERE ({args})";
+            string updateQuery = $"UPDATE Kingdoms SET {args} WHERE ({condition})";
             ExecuteQuery(updateQuery);
         }
 
@@ -287,9 +284,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM Debts", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            List<string> rows = new List<string>();
-
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }
@@ -304,9 +300,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE Debts SET ({mathArgs}) WHERE ({args})";
+            string updateQuery = $"UPDATE Debts SET {args} WHERE ({condition})";
             ExecuteQuery(updateQuery);
         }
 
@@ -342,9 +338,8 @@ namespace dragon_database
             SqlCommand readCommand = new SqlCommand($"SELECT * FROM KingdomRelations", ConsoleManager.Connection);
             SqlDataReader reader = readCommand.ExecuteReader();
 
-            List<string> rows = new List<string>();
-
-            for (int i = 0; i != index; i++)
+            reader.Read();
+            for (int i = 1; i < index; i++)
             {
                 reader.Read();
             }
@@ -360,9 +355,9 @@ namespace dragon_database
             ExecuteQuery(insertQuery);
         }
 
-        public override void Update(string args, string mathArgs)
+        public override void Update(string args, string condition)
         {
-            string updateQuery = $"UPDATE KingdomRelations SET ({mathArgs}) WHERE ({args})";
+            string updateQuery = $"UPDATE KingdomRelations SET {args} WHERE ({condition})";
             ExecuteQuery(updateQuery);
         }
 

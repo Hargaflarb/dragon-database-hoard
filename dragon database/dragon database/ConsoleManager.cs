@@ -223,28 +223,5 @@ namespace dragon_database
 
 
 
-
-
-        public static void AddAccount(string name, string password)
-        {
-            string writeQuery = $"INSERT INTO Accounts (Name, Password) VALUES ('{name}','{password}')";
-            SqlCommand insertCommand = new SqlCommand(writeQuery, Connection);
-
-            int rowsAffected = insertCommand.ExecuteNonQuery();
-            Console.WriteLine($"{rowsAffected} accounts successfully added");
-        }
-
-        public static void DeleteAccount(int ID)
-        {
-            string deleteQuery = $"DELETE FROM Accounts WHERE (Account_ID = '{ID}')";
-            SqlCommand deleteCommand = new SqlCommand(deleteQuery, Connection);
-
-            int rowsAffected = deleteCommand.ExecuteNonQuery();
-            Console.WriteLine($"{rowsAffected} accounts successfully deleted");
-
-        }
-
-
-
     }
 }
